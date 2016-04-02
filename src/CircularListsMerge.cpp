@@ -33,62 +33,43 @@ struct node{
 	struct node *next;
 };
 
-void swap(struct node *a, struct node *b)
-{
-	int temp = a->data;
-	a->data = b->data;
-	b->data = temp;
-}
-int bubbleSort(struct node *start)
-{
-	int swapped, i,len=0;
-	struct node *ptr1;
-	struct node *lptr = NULL;
-	do
-	{
-		swapped = 0;
-		ptr1 = start;
-		while (ptr1->next != lptr)
-		{
-			if (ptr1->data > ptr1->next->data)
-			{
-				swap(ptr1, ptr1->next);
-				swapped = 1;
-			}
-			ptr1 = ptr1->next;
-		}
-		lptr = ptr1;
-	} while (swapped);
-	ptr1 = start;
-	while (ptr1 != NULL)
-	{
-		ptr1 = ptr1->next;
-		len++;
-	}
-	return len;
-}
-
 int merge_circularlists(struct node **head1, struct node **head2){
 	//Returns Length of merged Sorted circular SLL and also points *head1 to final SLL .
-	if (*head1==NULL || *head2==NULL)
+	if (*head1 == NULL || *head2 == NULL)
 		return -1;
-	struct node *temp1, *temp2;
+	struct node *temp1;
 	temp1 = *head1;
-	int x = temp1->data;
-	while (temp1->next->data != x )
+	struct node *temp2;
+	int t;
+	int len = 0;
+	while (temp1->next != *head1)
 	{
+		len++;
 		temp1 = temp1->next;
 	}
-	temp1->next = NULL;
+	len = len + 1;
+	temp1->next = *head2;
 	temp2 = *head2;
-	temp1->next = temp2;
-	int y = temp2->data;
-	while (temp2->next->data != y)
+	while (temp2->next != *head2)
 	{
+		len++;
 		temp2 = temp2->next;
 	}
-	temp2->next = NULL;
-	int l=bubbleSort(*head1);
+	len = len + 1;
 	temp2->next = *head1;
-	return l;
+	temp1 = *head1;
+	for (temp1; temp1->next != *head1; temp1 = temp1->next)
+	{
+		for (temp2 = temp1->next; temp2->next != *head1; temp2 = temp2->next)
+		{
+			if (temp1->data > temp2->data)
+			{
+				t = temp1->data;
+				temp1->data = temp2->data;
+				temp2->data = t;
+			}
+		}
+	}
+	return len;
+
 }
